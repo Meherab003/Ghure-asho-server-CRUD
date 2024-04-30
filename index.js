@@ -10,7 +10,7 @@ app.use(express.json());
 
 //========MongoDB==========
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.bqfu1nq.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -28,7 +28,20 @@ async function run() {
     await client.connect();
 
     //Database declaration
-    const spotsCollection = client.db('spotsDB').collection('spots')
+    const spotsCollection = client.db('spotsDB').collection('spots');
+
+    app.get('/spots', async(req, res) => {
+      const cursor = spotsCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+
+    app.get('/spots/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await spotsCollection.findOne(query);
+      res.send(result); 
+    })
 
     app.post('/spots', async(req, res) => {
       const newSpot = req.body;
