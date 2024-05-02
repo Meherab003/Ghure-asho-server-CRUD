@@ -49,7 +49,13 @@ async function run() {
       res.send(result);
     });
 
-    
+    app.get('/countries/:countryName', async(req, res) => {
+      const countryName = req.params.countryName;
+      // console.log(country);
+      const query = {country: countryName };
+      const result = await countriesCollection.findOne(query);
+      res.send(result);
+    })
 
     app.get("/mylist/:email", async (req, res) => {
       const Email = req.params.email;
