@@ -29,12 +29,18 @@ async function run() {
 
     //Database declaration
     const spotsCollection = client.db("spotsDB").collection("spots");
+    const countriesCollection = client.db("spotsDB").collection("countries");
 
     app.get("/spots", async (req, res) => {
       const cursor = spotsCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
+    app.get('/countries', async(req, res) => {
+      const cursor = countriesCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
 
     app.get("/spots/:id", async (req, res) => {
       const id = req.params.id;
@@ -42,6 +48,8 @@ async function run() {
       const result = await spotsCollection.findOne(query);
       res.send(result);
     });
+
+    
 
     app.get("/mylist/:email", async (req, res) => {
       const Email = req.params.email;
