@@ -49,11 +49,19 @@ async function run() {
       res.send(result);
     });
 
-    app.get('/countries/:countryName', async(req, res) => {
+    app.get('/touristSpots/countries/:countryName', async(req, res) => {
       const countryName = req.params.countryName;
       // console.log(country);
       const query = {country: countryName };
       const result = await countriesCollection.findOne(query);
+      res.send(result);
+    })
+
+    app.get("/spots/country/:countryName", async(req, res) => {
+      const countryName = req.params.countryName;
+      const query = {country: countryName};
+      const cursor = spotsCollection.find(query);
+      const result = await cursor.toArray();
       res.send(result);
     })
 
